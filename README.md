@@ -84,9 +84,7 @@ HE гранаты — hegrenade
 
 ### УСТАНОВКА И НАСТРОЙКА
 ```
-Установка: Разместите плагин в директории addons/counterstrikesharp/plugins/
-Конфигурация: Файл конфигурации автоматически создается по пути:
-addons/counterstrikesharp/configs/plugins/CS2_ShowDamage/ShowDamageConfig.json
+Разместите плагин в директории addons/counterstrikesharp/plugins/
 ```
 ЭТОТ ПЛАГИН ФОРК ЭТИХ ПЛАГИНОВ:
 
