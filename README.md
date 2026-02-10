@@ -78,5 +78,7 @@ addons/counterstrikesharp/configs/plugins/CS2_ShowDamage/ShowDamageConfig.json
 
 ЭТОТ ПЛАГИН ФОРК ЭТИХ ПЛАГИНОВ:
 https://github.com/ABKAM2023/CS2ShowDamage
+
 https://hlmod.net/resources/categories/counterstrikesharp.26/
+
 https://hlmod.net/resources/cs2-show-damage.4514/
