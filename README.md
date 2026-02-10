@@ -99,5 +99,5 @@ https://github.com/ABKAM2023/CS2ShowDamage
 
 https://hlmod.net/resources/cs2-show-damage.4514/
 
-https://hlmod.net/resources/showdamage.4280/
+https://github.com/abnerfs/cs2-showdamage
 
