@@ -88,6 +88,11 @@ HE гранаты — hegrenade
 ```
 Разместите плагин в директории addons/counterstrikesharp/plugins/
 ```
+
+Требования для работы:
+CounterStrikeSharp версии 1.0.362 или выше
+.NET 8 runtime
+
 ЭТОТ ПЛАГИН ФОРК ЭТИХ ПЛАГИНОВ:
 
 https://github.com/ABKAM2023/CS2ShowDamage
