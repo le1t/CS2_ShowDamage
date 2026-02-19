@@ -1,99 +1,53 @@
 # CS2_ShowDamage
-Плагин CS2 отображающий нанесенный урон в реальном времени в центре экрана игрока. Показывает детальную статистику с цветовым кодированием, агрегирует урон от гранат, молотов и пуль, определяет пробития и убийства.
+Плагин отображает нанесённый урон в центре экрана (HUD) для каждого игрока. Поддерживает суммирование урона от гранат (HE), молотовых коктейлей и пуль (включая пробития). Учитываются хедшоты и убийства. Информация показывается в цвете в зависимости от величины урона.
 
-https://www.youtube.com/watch?v=yt4QmyRjSuk
+# https://www.youtube.com/watch?v=yt4QmyRjSuk
 
-## ОСНОВНЫЕ ВОЗМОЖНОСТИ
+# Требования
 ```
-Мгновенный показ урона — отображение каждого попадания с цветом в зависимости от урона
-Суммарный урон от гранат — агрегация урона от HE-гранат и молотовых коктейлей
-Определение пробитий — автоматическое обнаружение выстрелов через несколько целей
-Учет убийств — специальные сообщения при убийстве с подсчетом урона
-Гибкая конфигурация — полная настройка через конфиг-файл
-Управление командами — консольные команды для управления плагином
-Система логирования — три уровня детализации логов
+CounterStrikeSharp API версии 362 или выше
+.NET 8.0 Runtime
 ```
 
-### КОНФИГУРАЦИОННЫЕ ПАРАМЕТРЫ
+# Конфигурационные параметры
 ```
-Основные настройки:
-css_showdamage_enabled true/false (def. true) — Включение/выключение всего плагина
-css_showdamage_duration 0.1-10.0 (def. 1.0) — Длительность отображения уведомлений в секундах
-css_showdamage_log_level 0-2 (def. 0) — Уровень логирования (0=ошибки, 1=ошибки+информация, 2=отладка)
-css_showdamage_hud_color_mode 1 (def. 1) — Режим цветового оформления
-```
-### Настройки гранат и молотов:
-```
-css_showdamage_grenade_total_enabled true/false (def. true) — Включение суммарного подсчета урона от гранат
-css_showdamage_grenade_total_duration 1.0-10.0 (def. 3.0) — Время отображения суммарного урона от гранат
-css_showdamage_molotov_aggregation_duration 1.0-15.0 (def. 7.0) — Время агрегации урона от молотовых
-css_showdamage_grenade_total_message string (def. "Общий урон от гранаты: <font color='red'>{0} HP</font> (поражено: <font color='green'>{1} игроков</font>)")
-css_showdamage_molotov_total_message string (def. "Общий урон от молотового: <font color='red'>{0} HP</font> (поражено: <font color='green'>{1} игроков</font>)")
-```
-### Настройки пуль:
-```
-css_showdamage_bullet_total_enabled true/false (def. true) — Включение общего подсчета урона от пуль
-css_showdamage_bullet_aggregation_time 0.05-5.0 (def. 0.3) — Время агрегации урона от пуль
-css_showdamage_bullet_total_message string (def. "Общий урон: <font color='red'>{0} HP</font> (поражено: <font color='green'>{1} игроков</font>)")
-```
-### КОНСОЛЬНЫЕ КОМАНДЫ
-```
-css_showdamage_help — Показать справку по плагину
-css_showdamage_settings — Показать текущие настройки и статистику
-css_showdamage_reload — Перезагрузить конфигурацию из файла
-css_showdamage_cleardamage — Очистить суммарный урон от гранат, молотов и пуль
-css_showdamage_toggle — Включить/выключить плагин
+css_showdamage_enabled <0/1>, def.=1 – Включение/выключение плагина.
+css_showdamage_duration <0.1-10.0>, def.=1.0 – Длительность отображения уведомления в HUD (секунды).
+css_showdamage_log_level <0-5>, def.=4 – Уровень логирования (0-Trace,1-Debug,2-Info,3-Warning,4-Error,5-Critical).
+css_showdamage_hud_color_mode <1>, def.=1 – Режим цвета для урона в HUD (только 1 – динамический цвет в зависимости от урона).
+css_showdamage_grenade_total_enabled <0/1>, def.=1 – Включить суммарный подсчет урона от гранат и молотовых (показывается общий урон и количество поражённых игроков).
+css_showdamage_grenade_total_duration <1.0-10.0>, def.=3.0 – Длительность отображения суммарного урона от гранат (секунды).
+css_showdamage_molotov_aggregation_duration <1.0-15.0>, def.=7.0 – Время агрегации урона от молотового коктейля (секунды). Урон суммируется за этот период и показывается общий результат.
+css_showdamage_grenade_total_message (строка), def.="Общий урон от гранаты: <font color='red'>{0} HP</font> (поражено: <font color='green'>{1} игроков</font>)" – Шаблон сообщения для суммарного урона от HE-гранаты. {0} – общий урон, {1} – количество поражённых игроков.
+css_showdamage_molotov_total_message (строка), def.="Общий урон от молотового: <font color='red'>{0} HP</font> (поражено: <font color='green'>{1} игроков</font>)" – Шаблон сообщения для суммарного урона от молотового коктейля.
+css_showdamage_bullet_total_enabled <0/1>, def.=1 – Включить общий подсчет урона от пуль за выстрел (включая пробития).
+css_showdamage_bullet_aggregation_time <0.05-5.0>, def.=0.3 – Время агрегации пуль для общего подсчета (секунды). Урон от нескольких попаданий в рамках одного выстрела (например, при пробитии) суммируется и показывается единым сообщением.
+css_showdamage_bullet_total_message (строка), def.="Общий урон: <font color='red'>{0} HP</font> (поражено: <font color='green'>{1} игроков</font>)" – Шаблон сообщения для суммарного урона от пуль.
 ```
 
-### ПРИМЕРЫ РАБОТЫ ПЛАГИНА
+# Консольные команды
 ```
-Обычный урон:
-text
--25 HP [75 HP]         (зеленый, урон ≤ 25)
--48 HP [52 HP]         (желтый, урон 26-50)
--63 HP [37 HP]         (оранжевый, урон 51-75)
--98 HP [2 HP]          (красный, урон > 75)
-
-
-Убийство:
-text
--98 HP [УБИТ]          (красный с пометкой УБИТ)
-
-Суммарный урон от гранаты:
-text
-Общий урон от гранаты: 156 HP (поражено: 3 игроков)
-
-Суммарный урон от пуль (пробитие):
-text
-Общий урон: 124 HP (поражено: 2 игроков) (пробитие)
-```
-
-### ТЕХНИЧЕСКИЕ ОСОБЕННОСТИ
-```
-Цветовая система:
-Зеленый (green) — урон ≤ 25 HP
-Желтый (yellow) — урон 26-50 HP
-Оранжевый (orange) — урон 51-75 HP
-Красный (red) — урон > 75 HP
+css_showdamage_help – Показать подробную справку по плагину.
+css_showdamage_settings – Показать текущие настройки плагина и активные данные (количество записей об уроне).
+css_showdamage_test – Отправить тестовое сообщение в HUD и вывести информацию о настройках в чат (доступно только игроку).
+css_showdamage_reload – Перезагрузить конфигурацию из файла и очистить все накопленные данные об уроне.
+css_showdamage_cleardamage – Очистить все накопленные данные об уроне (гранаты, пули, агрегаторы).
+css_showdamage_toggle <0/1> – Включить (1) или выключить (0) плагин (аналог css_showdamage_setenabled).
+css_showdamage_setenabled <0/1> – Установить значение css_showdamage_enabled.
+css_showdamage_setnotifyduration <0.1-10.0> – Установить css_showdamage_duration.
+css_showdamage_setloglevel <0-5> – Установить css_showdamage_log_level.
+css_showdamage_sethudcolormode <1> – Установить css_showdamage_hud_color_mode (только 1).
+css_showdamage_setgrenadetotalenabled <0/1> – Установить css_showdamage_grenade_total_enabled.
+css_showdamage_setgrenadetotalduration <1.0-10.0> – Установить css_showdamage_grenade_total_duration.
+css_showdamage_setmolotovaggregationduration <1.0-15.0> – Установить css_showdamage_molotov_aggregation_duration.
+css_showdamage_setgrenadetotalmessage <текст> – Установить шаблон сообщения для HE-гранаты (css_showdamage_grenade_total_message). Можно использовать несколько слов.
+css_showdamage_setmolotovtotalmessage <текст> – Установить шаблон сообщения для молотова (css_showdamage_molotov_total_message).
+css_showdamage_setbullettotalenabled <0/1> – Установить css_showdamage_bullet_total_enabled.
+css_showdamage_setbulletaggregationtime <0.05-5.0> – Установить css_showdamage_bullet_aggregation_time.
+css_showdamage_setbullettotalmessage <текст> – Установить шаблон сообщения для пуль (css_showdamage_bullet_total_message).
 ```
 
-### Определяемые типы оружия:
-```
-HE гранаты — hegrenade
-Молотовые коктейли — molotov, incgrenade, inferno
-Пули — все остальные виды оружия
-```
-
-### УСТАНОВКА И НАСТРОЙКА
-```
-Разместите плагин в директории addons/counterstrikesharp/plugins/
-```
-
-Требования для работы:
-CounterStrikeSharp версии 1.0.362 или выше
-.NET 8 runtime
-
-ЭТОТ ПЛАГИН ФОРК ЭТИХ ПЛАГИНОВ:
+# ЭТОТ ПЛАГИН ФОРК ЭТИХ ПЛАГИНОВ:
 
 https://github.com/ABKAM2023/CS2ShowDamage
 
